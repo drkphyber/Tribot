@@ -100,7 +100,7 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 				navigator.traverse(20);
 				println("Being attacked!");
 				if (!Player.getRSPlayer().isInCombat()) {
-					Walking.walkTo(START_TILE);
+					WebWalking.walkTo(START_TILE);
 				}
 			}
 
