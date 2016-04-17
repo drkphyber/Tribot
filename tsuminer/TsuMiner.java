@@ -13,12 +13,14 @@ import org.tribot.api2007.Camera;
 import org.tribot.api2007.Combat;
 import org.tribot.api2007.Game;
 import org.tribot.api2007.Inventory;
+import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Options;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Skills; //to get XP/levels
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
+import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.api2007.util.DPathNavigator;
@@ -41,7 +43,7 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 
 	private final int[] COPPER_ID = { 7484, 7453 };
 	private final int[] TIN_ID = { 7486, 7485 };
-	private final int[] CLAY_ID = { 7444, 7487 };
+	private final int[] CLAY_ID = { 7454, 7487 };
 	private final int[] COAL_ID = { 7456, 7489 };
 	private final int[] IRON_ID = { 7455, 7488 };
 	private final int[] SILVER_ID = { 7457, 7490 };
@@ -98,7 +100,6 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 			if (Player.getRSPlayer().isInCombat()) {
 				Options.setRunOn(true);
 				navigator.traverse(20);
-				println("Being attacked!");
 				if (!Player.getRSPlayer().isInCombat()) {
 					WebWalking.walkTo(START_TILE);
 				}
@@ -123,7 +124,6 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 	private void startScript() {
 		Mouse.setSpeed(100);
 		START_TILE = Player.getPosition();
-		println(START_TILE);
 
 	}
 
@@ -140,35 +140,27 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 				next_target.click("Mine Rocks");
 				if (this.abc_util.shouldCheckTabs()) {
 					this.abc_util.checkTabs();
-					println("Checking tabs");
 				}
 				if (this.abc_util.shouldCheckXP()) {
 					this.abc_util.checkXP();
-					println("Checking XP");
 				}
 				if (this.abc_util.shouldExamineEntity()) {
 					this.abc_util.examineEntity();
-					println("Examining entity");
 				}
 				if (this.abc_util.shouldMoveMouse()) {
 					this.abc_util.moveMouse();
-					println("Moving mouse");
 				}
 				if (this.abc_util.shouldPickupMouse()) {
 					this.abc_util.pickupMouse();
-					println("Picking up mouse");
 				}
 				if (this.abc_util.shouldRightClick()) {
 					this.abc_util.rightClick();
-					println("Right clicking");
 				}
 				if (this.abc_util.shouldRotateCamera()) {
 					this.abc_util.rotateCamera();
-					println("Rotating camera");
 				}
 				if (this.abc_util.shouldLeaveGame()) {
 					this.abc_util.leaveGame();
-					println("Leaving game");
 				}
 
 			} else {
@@ -191,6 +183,15 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 
 	private void bank(RSTile startTile) {
 		WebWalking.walkToBank();
+		RSNPC[] nearestBanker = NPCs.findNearest("Banker");
+		
+		if (nearestBanker.length > 0){
+		Camera.turnToTile(nearestBanker[0].getPosition());
+		
+		while (!nearestBanker[0].isOnScreen()){
+			sleep(100);
+		}
+		}
 		Banking.openBank();
 		Banking.depositAllExcept(PICKAXE_ID);
 		Banking.close();
