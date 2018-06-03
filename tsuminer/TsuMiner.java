@@ -183,7 +183,7 @@ public class TsuMiner extends Script implements Painting, FCPaintable {
 
 	private void bank(RSTile startTile) {
 		WebWalking.walkToBank();
-		RSNPC[] nearestBanker = NPCs.findNearest("Banker");
+		RSNPC[] nearestBanker = NPCs.findNearest("Bank chest");
 		
 		if (nearestBanker.length > 0){
 		Camera.turnToTile(nearestBanker[0].getPosition());
